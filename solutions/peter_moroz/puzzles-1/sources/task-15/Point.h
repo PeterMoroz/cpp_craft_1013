@@ -4,8 +4,8 @@
 class Point {
 
 public:
-  Point() : row_(0), col_(0) {}
-  Point(int row, int col) : row_(row), col_(col) {}
+  Point() : col_(0), row_(0) {}
+  Point(int row, int col) : col_(col), row_(row) {}
 
   int row() const { return row_; }
   int col() const { return col_; }

@@ -132,7 +132,8 @@ vector<Point> PickIslandParts(const Point& pt, const EarthSurface& earth_surface
       vector<Point> step_points = GetNeighborhood(seed_points[i], earth_surface);
 
       /* exclude initial point from iteration results */
-      vector<Point>::iterator it = find(step_points.begin(), step_points.end(), pt);
+      vector<Point>::iterator it;
+      it = find(step_points.begin(), step_points.end(), pt);
       if (it != step_points.end())
         step_points.erase(it);
 
@@ -154,7 +155,8 @@ vector<Point> PickIslandParts(const Point& pt, const EarthSurface& earth_surface
 template<class T>
 void CopyUnique(vector<T>& dst, const vector<T>& src, int& count) {
   count = 0;
-  for (vector<T>::const_iterator it = src.begin(); it != src.end(); ++it) {
+  typename vector<T>::const_iterator it = src.begin();
+  for (; it != src.end(); ++it) {
     if (find(dst.begin(), dst.end(), *it) == dst.end()) {
       dst.push_back(*it);
       ++count;

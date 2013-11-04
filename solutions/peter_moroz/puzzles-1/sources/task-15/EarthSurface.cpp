@@ -1,6 +1,6 @@
 #include "EarthSurface.h"
 
-#include <exception>
+#include <stdexcept>
 #include <sstream>
 
 using namespace std;

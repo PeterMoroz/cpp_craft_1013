@@ -34,6 +34,8 @@ void Message::ReadFrom(istream& is) {
 }
 void Message::WriteTo(ostream& os) const {
   os.write(stock_name_, sizeof(stock_name_));
+  char dummy = '\0';
+  os.write(&dummy, sizeof(dummy));
   os.write(reinterpret_cast<const char*>(&days_since_christmas_), sizeof(days_since_christmas_));
   os.write(reinterpret_cast<const char*>(&vwap_), sizeof(vwap_));
   os.write(reinterpret_cast<const char*>(&volume_), sizeof(volume_));

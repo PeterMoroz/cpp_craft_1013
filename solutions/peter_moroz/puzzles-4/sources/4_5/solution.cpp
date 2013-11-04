@@ -100,7 +100,7 @@ int task4_5::solution::get_min() const
 	int data_element = 0;
 	try {
 		data_element = data_processor_.GetMinElement();
-	} catch (exception& ex) {
+	} catch (const exception& ex) {
 		cerr << "solution::get_min() - exception has been caught."
 			<< " reason: " << ex.what() << endl;
 	}
@@ -111,7 +111,7 @@ int task4_5::solution::get_max() const
 	int data_element = 0;
 	try {
 		data_element = data_processor_.GetMaxElement();		
-	} catch (exception& ex) {
+	} catch (const exception& ex) {
 		cerr << "solution::get_min() - exception has been caught."
 			<< " reason: " << ex.what() << endl;
 	}
