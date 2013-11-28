@@ -23,7 +23,7 @@ namespace task5_6
   private:
   public:
     std::list<T> container_;
-    mutable boost::recursive_mutex container_guard_;
+    mutable boost::mutex container_guard_;
 	};
 
 	template< typename T >
@@ -39,15 +39,15 @@ namespace task5_6
 	template< typename T >
 	void thread_safe_queue< T >::push( const T& new_element )
 	{
-    boost::unique_lock<boost::recursive_mutex> lock(container_guard_);
+    boost::unique_lock<boost::mutex> lock(container_guard_);
     container_.push_back( new_element );
 	}
 
 	template< typename T >
 	bool thread_safe_queue< T >::pop( T& result )
 	{
-    boost::unique_lock<boost::recursive_mutex> lock(container_guard_);
-    if (empty())
+    boost::unique_lock<boost::mutex> lock(container_guard_);
+    if (container_.empty())
       return false;
 
     result = container_.front();
@@ -58,14 +58,14 @@ namespace task5_6
 	template< typename T >
 	bool thread_safe_queue< T >::empty() const
 	{
-    boost::unique_lock<boost::recursive_mutex> lock(container_guard_);
+    boost::unique_lock<boost::mutex> lock(container_guard_);
     return (container_.size() == 0);
 	}
 
 	template< typename T >
 	size_t thread_safe_queue< T >::size() const
 	{
-    boost::unique_lock<boost::recursive_mutex> lock(container_guard_);
+    boost::unique_lock<boost::mutex> lock(container_guard_);
     return container_.size();
 	}
 
