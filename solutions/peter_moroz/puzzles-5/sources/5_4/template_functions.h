@@ -70,13 +70,14 @@ namespace task5_4
   template < typename Container >
   class ContainerCleaner1 < Container, true >
   {
+    typedef typename Container::value_type ContainerValueType;
   public:
     ContainerCleaner1( Container& container ) 
       : container_(container) {}
     void Perform()
     {
       for_each( container_.begin(), container_.end(), 
-                Deleter<Container::value_type>() );
+                Deleter<ContainerValueType>() );
       container_.erase( container_.begin(), container_.end() );
     }
   private:
@@ -120,13 +121,14 @@ namespace task5_4
   template < typename Container >
   class ContainerCleaner2 < Container, false, true > 
   {
+    typedef typename Container::value_type ContainerValueType;
   public:
     ContainerCleaner2( Container& container ) 
       : container_(container) {}
     void Perform()
     {
       for_each( container_.begin(), container_.end(), 
-                Deleter1<Container::value_type, true>() );
+                Deleter1<ContainerValueType, true>() );
       container_.erase( container_.begin(), container_.end() );
     }
   private:
@@ -136,13 +138,14 @@ namespace task5_4
   template < typename Container >
   class ContainerCleaner2 < Container, true, false >
   {
+    typedef typename Container::value_type ContainerValueType;
   public:
     ContainerCleaner2( Container& container ) 
       : container_(container) {}
     void Perform()
     {
       for_each( container_.begin(), container_.end(), 
-                Deleter1<Container::value_type, false>() );
+                Deleter1<ContainerValueType, false>() );
       container_.erase( container_.begin(), container_.end() );
     }
   private:
@@ -152,13 +155,14 @@ namespace task5_4
   template < typename Container >
   class ContainerCleaner2 < Container, true, true > 
   {
+    typedef typename Container::value_type ContainerValueType;
   public:
     ContainerCleaner2( Container& container ) 
       : container_(container) {}
     void Perform()
     {
       for_each( container_.begin(), container_.end(), 
-                Deleter2<Container::value_type>() );
+                Deleter2<ContainerValueType>() );
       container_.erase( container_.begin(), container_.end() );
     }
   private:
