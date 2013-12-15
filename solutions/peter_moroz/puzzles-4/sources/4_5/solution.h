@@ -24,30 +24,26 @@ namespace task4_5
 		FindMinMaxElementsInMatrix* parent_;
 	  };
 
+    friend class FindMinMaxElementsInRow;
 	  typedef boost::shared_ptr<FindMinMaxElementsInRow> RowProcessorPtr;
 
 	public:
-	  FindMinMaxElementsInMatrix(const matrix_type& matrix);
+	  explicit FindMinMaxElementsInMatrix(const matrix_type& matrix);
 
+  private:
+	  void PutRowResults(const std::pair<int, int>& rr);
+
+  public:
 	  void Perform();
-
 	  int GetMinElement() const;
 	  int GetMaxElement() const;
 
-	  void PutRowResults(const std::pair<int, int>& rr);
-
 	private:
-	  void Reset();
-
-	private:
-	  bool complete_;
 	  int minimal_element_;
 	  int maximal_element_;
 
 	  boost::mutex rows_results_guard_;
-	  mutable boost::mutex instance_guard_;
 	  boost::thread_group thg_;
-	  mutable boost::condition_variable ready_;
 	  
 	  std::vector<std::pair<int, int> > rows_results_;  
 	  const matrix_type& matrix_;

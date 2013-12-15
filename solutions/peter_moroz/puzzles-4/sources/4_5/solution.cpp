@@ -27,19 +27,12 @@ void FindMinMaxElementsInMatrix::FindMinMaxElementsInRow::Run() {
 
 
 FindMinMaxElementsInMatrix::FindMinMaxElementsInMatrix(const matrix_type& matrix)
-   : complete_(false), minimal_element_(0), 
-     maximal_element_(0), matrix_(matrix) {}
+   : minimal_element_(0), maximal_element_(0), matrix_(matrix) {}
 
 void FindMinMaxElementsInMatrix::Perform() {
-  if (matrix_.size() == 0) {
-	  complete_ = true;
-	  return;
-  }
+  if (matrix_.size() == 0) return;
 
-  boost::unique_lock<boost::mutex> lock(instance_guard_);
-
-  Reset();
-
+  rows_results_.clear();
   vector<RowProcessorPtr> row_processors;
   for (size_t i = 0; i < matrix_.size(); ++i) {
 	  RowProcessorPtr row_processor(new FindMinMaxElementsInRow(this, matrix_[i]));
@@ -47,9 +40,11 @@ void FindMinMaxElementsInMatrix::Perform() {
 	  thg_.create_thread(boost::bind(&FindMinMaxElementsInRow::Run, row_processor));
   }
   
+  minimal_element_ = numeric_limits<int>().max();
+  maximal_element_ = numeric_limits<int>().min();
   thg_.join_all();
   {
-     boost::mutex::scoped_lock(rows_results_guard_);
+     boost::mutex::scoped_lock lock(rows_results_guard_);
      for (size_t i = 0; i < rows_results_.size(); ++i) {
        if (rows_results_[i].first < minimal_element_)
          minimal_element_ = rows_results_[i].first;
@@ -57,33 +52,17 @@ void FindMinMaxElementsInMatrix::Perform() {
          maximal_element_ = rows_results_[i].second;
      }
   }
-
-  complete_ = true;
-  ready_.notify_all();
 }
 int FindMinMaxElementsInMatrix::GetMinElement() const {
-  boost::unique_lock<boost::mutex> lock(instance_guard_);
-  while (!complete_)
-	ready_.wait(lock);
   return minimal_element_;
 }
 int FindMinMaxElementsInMatrix::GetMaxElement() const {
-  boost::unique_lock<boost::mutex> lock(instance_guard_);
-  while (!complete_)
-	ready_.wait(lock);
   return maximal_element_;
 }
 
 void FindMinMaxElementsInMatrix::PutRowResults(const pair<int, int>& rr) {
-  boost::mutex::scoped_lock(rows_results_guard_);
+  boost::mutex::scoped_lock lock(rows_results_guard_);
   rows_results_.push_back(rr);
-}
-
-void FindMinMaxElementsInMatrix::Reset() {
-  complete_ = false;
-  rows_results_.clear();
-  minimal_element_ = numeric_limits<int>().max();
-  maximal_element_ = numeric_limits<int>().min();
 }
 
 }
