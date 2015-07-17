@@ -13,5 +13,3 @@ Please add file readme.txt (<GIT>/solutions/<USER_NAME>/readme.txt) with next in
 
 After creating your folder and adding this file, please push changes to github and create pull request to main repo.
 Also please connect with ivan_sidarau at skype, and I will add you to The Student Skype Group.
-
-Test change
